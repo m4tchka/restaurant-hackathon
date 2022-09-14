@@ -17,8 +17,7 @@ function ModalButton({ id, name, onClick }) {
 
     async function getRecipeInfo(id) {
         let response = await fetch(
-
-            `https://api.spoonacular.com/recipes/${id}/information?apiKey=1e0627209aa14f53a49187d72790693f`
+            `https://api.spoonacular.com/recipes/${id}/information?apiKey=${process.env.REACT_APP_API_KEY}`
         );
 
         let data = await response.json();
@@ -28,46 +27,53 @@ function ModalButton({ id, name, onClick }) {
         return createMarkup(data.summary);
     }
     function createMarkup() {
-        console.log("creatmarkupcalled!")
+        console.log("creatmarkupcalled!");
         return { __html: `${summary}` };
     }
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
-			<>
-				<Button
-					colorScheme="teal"
-                    className="modal-button"
-					variant="outline"
-                    color="white"
-					onClick={() => {
-						onOpen();
-						getRecipeInfo(id);
-					}}
-				>
-					Open Modal
-				</Button>
+        <>
+            <Button
+                colorScheme="teal"
+                className="modal-button"
+                variant="outline"
+                color="white"
+                onClick={() => {
+                    onOpen();
+                    getRecipeInfo(id);
+                }}
+            >
+                Open Modal
+            </Button>
 
-				<Modal isOpen={isOpen} onClose={onClose}>
-					<ModalOverlay />
-					<ModalContent>
-						<ModalHeader>{name}</ModalHeader>
-						<ModalCloseButton />
-						<ModalBody>
-							<div dangerouslySetInnerHTML={createMarkup()}></div>
-						</ModalBody>
-
-						<ModalFooter>
-							<Button colorScheme="teal" variant="solid" onClick={onClick}>
-								Add to Basket
-							</Button>
-							<Button colorScheme="teal" variant="outline" onClick={onClose}>
-								Close
-							</Button>
-						</ModalFooter>
-					</ModalContent>
-				</Modal>
-			</>
-		);
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>{name}</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <div dangerouslySetInnerHTML={createMarkup()}></div>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button
+                            colorScheme="teal"
+                            variant="solid"
+                            onClick={onClick}
+                        >
+                            Add to Basket
+                        </Button>
+                        <Button
+                            colorScheme="teal"
+                            variant="outline"
+                            onClick={onClose}
+                        >
+                            Close
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        </>
+    );
 }
 export default ModalButton;
